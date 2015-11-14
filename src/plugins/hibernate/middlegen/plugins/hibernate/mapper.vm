@@ -1,0 +1,23 @@
+package ${table.package}.${plugin.hibernateMapperElement.package};
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+import ${table.package}.${plugin.hibernateDomainObjectElement.package}.${table.destinationClassName};
+import com.hyxt.platform.commons.page.Page;
+import com.hyxt.platform.commons.page.Pageable;
+
+public interface ${table.destinationClassName}${plugin.hibernateMapperElement.suffix} {
+
+	void insert${table.destinationClassName}(${table.destinationClassName} ${table.variableName});
+
+	void delete${table.destinationClassName}By${table.pkColumn.variableSpellSqlName}(${table.pkColumn.javaType} ${table.pkColumn.variableName});
+
+	void update${table.destinationClassName}(${table.destinationClassName} ${table.variableName});
+
+	Page<${table.destinationClassName}> search${table.destinationClassName}ByParams(@Param("map")Map<String, String> map , Pageable pageable);
+
+	List<${table.destinationClassName}> search${table.destinationClassName}ByParams(@Param("map")Map<String, String> map);
+
+} 

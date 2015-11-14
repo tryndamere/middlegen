@@ -1,0 +1,31 @@
+package ${table.package}.${plugin.hibernateDomainObjectElement.package};
+
+/**
+ * ${table.classDescription}
+ * @author ${plugin.author}
+ */
+public class ${table.destinationClassName} {
+#foreach ($column in $table.columns )
+	/**
+	 *  ${column.fieldDescription}
+	 */
+	private ${column.javaType} ${column.variableName};
+#end
+#foreach ($column in $table.columns )
+	/**
+	 * ${column.fieldDescription}
+	 * @param ${column.variableName}
+	 */
+	public void ${column.setterName}(${column.javaType} ${column.variableName}){
+		this.${column.variableName} = ${column.variableName};
+	}
+	
+    /**
+     * ${column.fieldDescription}
+     * @return
+     */	
+    public ${column.javaType} ${column.getterName}(){
+    	return ${column.variableName};
+    }
+#end
+}

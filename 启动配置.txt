@@ -1,0 +1,7 @@
+middlegen不能通过直接点击build.xml来启动。
+需要做如下配置：
+1.在菜单Run-->Run...
+2.在JavaApplication下new一个 应用程序
+3.在main class里面填:org.apache.tools.ant.launch.Launcher
+4.在该common tab里面，选上Run和debug，保存退出
+5.在主菜单上的run和debug图标上就可以看到middlegen应用程序了，点击运行

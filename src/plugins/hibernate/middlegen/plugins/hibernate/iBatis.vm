@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="${table.package}.${plugin.hibernateMapperElement.package}.${table.destinationClassName}${plugin.hibernateMapperElement.suffix}">
+
+    <sql id="${table.variableName}BaseColumnSql">
+#set ( $count = 1 )
+#foreach ($column in $table.columns )
+#if($count==$table.columns.size())
+        ${column.sqlName}
+#else
+        ${column.sqlName},
+#end
+#set ( $count = $count + 1 )
+#end
+    </sql>
+
+    <sql id="${table.variableName}BaseWhereSql">
+        <if test="map!=null">
+            <where>
+#set ( $count = 1 )
+#foreach ($column in $table.columns )
+#if($count==1)
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(map.${column.variableName})">
+                    ${column.sqlName} = #{map.${column.variableName}}
+                </if>
+#else
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(map.${column.variableName})">
+                    AND ${column.sqlName} = #{map.${column.variableName}}
+                </if>
+#end
+#set ( $count = $count + 1 )
+#end
+            </where>
+        </if>
+    </sql>
+
+    <insert id="insert${table.destinationClassName}" parameterType="${table.package}.${plugin.hibernateDomainObjectElement.package}.${table.destinationClassName}">
+        INSERT INTO ${table.sqlName}(
+        <include refid="${table.variableName}BaseColumnSql"/>
+        )VALUES(
+#set ( $count = 1 )
+#foreach ($column in $table.columns )
+#if($count==$table.columns.size())
+            #{${column.variableName}}
+#else
+            #{${column.variableName}},
+#end
+#set ( $count = $count + 1 )
+#end
+        )
+    </insert>
+
+    #set($pkName = ${table.pkColumn.sqlName})
+
+    <delete id="delete${table.destinationClassName}By${table.pkColumn.variableSpellSqlName}" parameterType="${table.pkColumn.javaType}">
+        DELETE FROM ${table.sqlName} WHERE ${table.pkColumn.sqlName} = #{${table.pkColumn.variableName}}
+    </delete>
+
+    <update id="update${table.destinationClassName}" parameterType="${table.package}.${plugin.hibernateDomainObjectElement.package}.${table.destinationClassName}">
+        UPDATE ${table.sqlName}
+        <set>
+#set ( $count = 1 )
+#foreach ($column in $table.columns )
+#if($pkName != ${column.sqlName})
+            <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(${column.variableName})">
+#if($count==$table.columns.size())
+                ${column.sqlName} = #{${column.variableName}}
+#else
+                ${column.sqlName} = #{${column.variableName}} ,
+#end
+            </if>
+#set ( $count = $count + 1 )
+#end
+#end
+        </set>
+        WHERE $pkName = #{${table.pkColumn.variableName}}
+    </update>
+
+    <select id="search${table.destinationClassName}ByParams" parameterType="map" resultMap="${table.variableName}Map">
+        SELECT
+        <include refid="${table.variableName}BaseColumnSql"/>
+        FROM ${table.sqlName}
+        <include refid="${table.variableName}BaseWhereSql"/>
+    </select>
+
+    <resultMap type="${table.package}.${plugin.hibernateDomainObjectElement.package}.${table.destinationClassName}" id="${table.variableName}Map">
+        <id column="$pkName" property="${table.pkColumn.variableName}"/>
+#set ( $count = 1 )
+#foreach ($column in $table.columns )
+#if($pkName != ${column.sqlName})
+        <result column="${column.sqlName}" property="${column.variableName}"/>
+#end
+#end
+    </resultMap>
+
+</mapper>
