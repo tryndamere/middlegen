@@ -5,8 +5,8 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import ${table.package}.${plugin.hibernateDomainObjectElement.package}.${table.destinationClassName};
-import com.hyxt.platform.commons.page.Page;
-import com.hyxt.platform.commons.page.Pageable;
+import com.fc.platform.commons.page.Page;
+import com.fc.platform.commons.page.Pageable;
 
 public interface ${table.destinationClassName}${plugin.hibernateMapperElement.suffix} {
 
